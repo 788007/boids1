@@ -1,0 +1,27 @@
+
+body{
+  background-color:#E0FFFF  ;
+}
+
+#wrapperDiv{
+  background-color: red;
+  width:1000px;
+  height:850px;
+  border:solid slateblue 2px;
+  margin:auto;
+  margin-top: 20px;
+}
+
+#canDiv{
+  background-color: #79BEA6;
+  width:1000px;
+  height:750px;
+
+}
+
+#menuDiv{
+  background-color: mediumpurple;
+  width:1000px;
+  height:100px;
+
+}
