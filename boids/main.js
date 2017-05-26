@@ -42,7 +42,7 @@ class Main {
     this.menuButtons = [];
     this.makeRect = false;
     this.boids = [];
-    this.numBoids = 50;
+    this.numBoids = 5;
 
     //create all initial items
     this.init();
@@ -73,19 +73,26 @@ class Main {
     for(let k = 0; k < this.numBoids; k++){
       this.boids[k].run();
     }
+    if(this.repeller)
+      this.repeller.run();
 
   }
   createBoids(){
     for(let j = 0; j < this.numBoids; j++){
-      var xPos = Math.random()*1000;
-      var yPos = Math.random()*750;
+      var xPos = Math.random()*950 + 25;
+      var yPos = Math.random()*700 + 25;
       var location = vector2d(xPos, yPos);
       var b = new Boid(this, location);
       this.boids.push(b);
+      }
     }
-
-  }
-  //  +++++++++++++++++++++++++++++++++  create buttons for menu area
+    addRepeller(){
+      var repX = Math.random()*950 + 25;
+      var repY = Math.random()*700 + 25;
+      var repLoc = vector2d(repX, repY);
+      this.repeller = new Repeller(this, repLoc);
+    }
+  // create buttons for menu area
   createMenuButtons(){
 
      var numButtons = 5;
@@ -98,8 +105,7 @@ class Main {
        var buttImg = new Image();
        buttImg.src = "buttons/button.png";
        buttImg.id = "b"+i;
-       console.log(buttImg.id);
-       console.log(i);
+       buttImg.on = false;
        button.appendChild(buttImg);
        //  Add event listeners to images (not buttons)
        buttImg.addEventListener('mouseover',buttonMouseOverHandler,false);
@@ -131,22 +137,33 @@ function buttonMouseOutHandler(){
 
 function buttonMouseClickHandler(){
   if(this.id == "b0"){
-    if(main.canvas.style.backgroundColor == 'white'){
+    if(!this.on){
       main.canvas.style.backgroundColor = 'black';
-    }else if(main.canvas.style.backgroundColor == 'black'){
+      this.on = true;
+    }else {
       main.canvas.style.backgroundColor = 'white';
+      this.on = false
     }
   }else if (this.id == "b1"){
-    console.log(main.numBoids);
-    for(let h = 0; h < main.numBoids; h++){
-      console.log("inside");
-
-      main.boids[h].addForce(vector2d(0.0, 4.0));
+    if(!this.on){
+      for(let h = 0; h < main.numBoids; h++){
+        main.boids[h].gravity = true;
+      }
+      this.on = true;
+    }else{
+        for(let h = 0; h < main.numBoids; h++){
+          main.boids[h].gravity = false;
+          main.boids[h].vel = vector2d(Math.random() * 6 - 3,  Math.random() * 6 - 3);
+        }
+        this.on = false;
     }
   }else if (this.id == "b2"){
-
+    for(let i = 0; i < main.numBoids; i++){
+      main.boids[i].randomColor();
+    }
   }else if (this.id == "b3"){
-
+    if(!this.on)
+      main.addRepeller();
   }else if (this.id == "b4"){
 
   }
